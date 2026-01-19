@@ -1,4 +1,4 @@
-/* Базовые настройки */
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: #f3f4f6;
@@ -14,7 +14,6 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
 
-/* Утилиты */
 .hide {
     display: none !important;
 }
@@ -29,7 +28,7 @@ body {
     transition: all 0.2s;
 }
 .input-field:focus {
-    border-color: #3b82f6;
+    border-color: #4f9fce;
     background-color: white;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
@@ -37,7 +36,7 @@ body {
 /* Кнопки */
 .btn-primary {
     width: 100%;
-    background-color: #2563eb;
+    background-color: #4f9fce;
     color: white;
     font-weight: 600;
     padding: 12px;
@@ -46,12 +45,12 @@ body {
 }
 .btn-primary:active {
     transform: scale(0.98);
-    background-color: #1d4ed8;
+    background-color: #4f9fce;
 }
 
 .btn-danger {
     width: 100%;
-    background-color: #ef4444;
+    background-color: #ce3232;
     color: white;
     font-weight: 600;
     padding: 12px;
@@ -62,7 +61,6 @@ body {
     transform: scale(0.98);
 }
 
-/* Навигация */
 .nav-btn {
     padding: 6px 12px;
     border-radius: 8px;
@@ -71,7 +69,7 @@ body {
 }
 .nav-btn.active {
     background-color: #eff6ff;
-    color: #2563eb;
+    color: #048ad8;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -87,6 +85,5 @@ body {
 .status-maint { background-color: #fee2e2; color: #991b1b; }
 .status-off { background-color: #f3f4f6; color: #4b5563; }
 
-/* Анимации */
 .fade-in { animation: fadeIn 0.3s ease-in-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }

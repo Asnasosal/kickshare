@@ -5,6 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ScootRent - Оператор</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: {
+                            50: '#f0f9fd',  
+                            100: '#e0f2fa',
+                            200: '#bae0f5', 
+                            500: '#4f9fce', 
+                            600: '#4f9fce', 
+                            700: '#3a8ebd', 
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -87,7 +105,6 @@
 
             <!-- List -->
             <div id="scooter-list" class="space-y-3 pb-20">
-                <!-- JS Generated -->
             </div>
         </div>
 
@@ -113,7 +130,6 @@
         <div id="view-history" class="hide fade-in space-y-4">
             <h3 class="text-lg font-bold mb-4 px-1">История поездок</h3>
             <div id="history-list" class="space-y-3 pb-10">
-                <!-- JS Generated History Items -->
                 <div class="text-center text-gray-400 mt-10 text-sm" id="empty-history-msg">История пока пуста</div>
             </div>
         </div>
@@ -121,7 +137,6 @@
         <!-- View 4 Профиль -->
         <div id="view-profile" class="hide fade-in flex flex-col items-center pt-10">
             <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 shadow-lg shadow-blue-200" id="profile-avatar">
-                <!-- Инициалы JS -->
             </div>
             <h2 class="text-xl font-bold text-gray-800 mb-1" id="profile-name">Имя</h2>
             <p class="text-gray-500 mb-8" id="profile-phone">+7 ...</p>
@@ -192,8 +207,6 @@
     </div>
 </div>
 
-<!-- Логика -->
 <script src="script.js"></script>
 </body>
-
-</html> 
+</html>

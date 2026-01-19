@@ -1,9 +1,7 @@
-// --- КОНФИГУРАЦИЯ И ДАННЫЕ (MOCK DB) ---
 const DB_KEY_USER = 'scootrent_user';
 const DB_KEY_HISTORY = 'scootrent_history';
 const DB_KEY_SESSION = 'scootrent_session';
 
-// База самокатов
 const scootersDB = [
     { id: 101, model: 'Model X1', status: 'free', price: 50 },
     { id: 102, model: 'Model X1', status: 'free', price: 50 },
@@ -32,11 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function loadData() {
-    // Загрузка пользователя
     const storedUser = localStorage.getItem(DB_KEY_USER);
     if (storedUser) currentUser = JSON.parse(storedUser);
 
-    // Загрузка истории
     const storedHistory = localStorage.getItem(DB_KEY_HISTORY);
     if (storedHistory) historyData = JSON.parse(storedHistory);
 
@@ -49,20 +45,16 @@ function loadData() {
 }
 
 function initEventListeners() {
-    // Навигация
     document.getElementById('nav-scooters').addEventListener('click', () => nav('scooters'));
     document.getElementById('nav-history').addEventListener('click', () => nav('history'));
     document.getElementById('nav-profile').addEventListener('click', () => nav('profile'));
 
-    // Авторизация
     document.getElementById('auth-form').addEventListener('submit', handleLogin);
     document.getElementById('auth-phone').addEventListener('input', phoneMask);
 
-    // Поиск
     document.getElementById('search-input').addEventListener('input', handleSearch);
 }
 
-// --- ЛОГИКА АВТОРИЗАЦИИ ---
 function showAuth() {
     document.getElementById('view-auth').classList.remove('hide');
     document.getElementById('app-header').classList.add('hide');
@@ -110,13 +102,11 @@ function logout() {
 
 // --- НАВИГАЦИЯ ---
 function nav(screenName) {
-    // Скрываем все экраны
     document.getElementById('view-scooters').classList.add('hide');
     document.getElementById('view-history').classList.add('hide');
     document.getElementById('view-profile').classList.add('hide');
     document.getElementById('view-rent-confirm').classList.add('hide');
     
-    // Сброс активного класса кнопок
     document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
 
     if(screenName === 'scooters') {
@@ -139,15 +129,12 @@ function renderProfile() {
     if(!currentUser) return;
     document.getElementById('profile-name').innerText = currentUser.name;
     document.getElementById('profile-phone').innerText = currentUser.phone;
-    
-    // Инициалы
+
     const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0,2);
     document.getElementById('profile-avatar').innerText = initials;
 
-    // Подсчет баланса 
     const totalEarned = historyData.reduce((sum, item) => sum + item.cost, 0);
-    
-    // Выводим с пробелами
+
     document.getElementById('profile-balance').innerText = totalEarned.toLocaleString('ru-RU');
 }
 
@@ -159,15 +146,12 @@ function renderScooters(filterText = '') {
     const query = filterText.toLowerCase();
 
     scootersDB.forEach(scooter => {
-        // 1. Скрываем сломанные и отключенные
         if (scooter.status === 'maint' || scooter.status === 'off') return;
 
-        // 2. Фильтрация поиска
         if (!scooter.model.toLowerCase().includes(query) && !scooter.id.toString().includes(query)) {
             return;
         }
 
-        // 3. Статусы
         const isMyRent = activeSession && activeSession.scooterId === scooter.id;
         let displayStatus = isMyRent ? 'rent' : scooter.status;
         
@@ -182,7 +166,6 @@ function renderScooters(filterText = '') {
                 btnHtml = `<span class="text-xs text-gray-400">У вас активная аренда</span>`;
             }
         } else {
-            // Раз мы отфильтровали maint/off, остается только rent
             statusHtml = `<span class="status-badge status-rent">В аренде</span>`;
             btnHtml = isMyRent ? `<span class="text-xs text-blue-600 font-bold">Ваш самокат</span>` : `<span class="text-xs text-gray-400">Занят</span>`;
         }
@@ -215,8 +198,6 @@ function handleSearch(e) {
 }
 
 // --- АРЕНДА ---
-
-// 1. Подтверждение
 function openRentConfirm(id) {
     const scooter = scootersDB.find(s => s.id === id);
     if(!scooter) return;
@@ -260,8 +241,7 @@ function startRent() {
 // 3. UI Активной аренды
 function resumeActiveRentUI() {
     document.getElementById('active-rent-widget').classList.remove('hide');
-    
-    // Заполняем статические данные
+
     document.getElementById('widget-model').innerText = activeSession.model;
     document.getElementById('widget-rate').innerText = activeSession.price; // Показываем тариф
     
@@ -279,20 +259,16 @@ function resumeActiveRentUI() {
 function updateTimer() {
     const m = Math.floor(activeSession.elapsedSeconds / 60);
     const s = activeSession.elapsedSeconds % 60;
-    
-    // Обновляем цифры таймера
+
     document.getElementById('timer').innerText = 
         `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     
-    // НОВАЯ ЛОГИКА: Считаем стоимость пропорционально секундам
-    // (цена в минуту / 60) * прошедшие секунды
     const exactCost = (activeSession.price / 60) * activeSession.elapsedSeconds;
-    
-    // Округляем до целого (чтобы не было копеек), но цифра будет меняться часто
+
     document.getElementById('widget-total').innerText = Math.floor(exactCost);
 }
 
-// 4. Завершение (Модалка)
+// 4. Завершение 
 function finishRent() {
     document.getElementById('modal-finish').classList.remove('hide');
 }
@@ -307,11 +283,8 @@ function confirmFinishRent() {
     
     const endTime = new Date();
     
-    // --- ИЗМЕНЕНИЕ: Точная формула, как на счетчике ---
-    // (Цена в минуту / 60) * секунды. Округляем вниз до целого.
     const exactCost = (activeSession.price / 60) * activeSession.elapsedSeconds;
     const cost = Math.floor(exactCost); 
-    // --------------------------------------------------
 
     const historyItem = {
         date: new Date().toLocaleDateString('ru-RU'),
@@ -328,8 +301,7 @@ function confirmFinishRent() {
     activeSession = null;
 
     document.getElementById('active-rent-widget').classList.add('hide');
-    
-    // Показываем чек
+
     document.getElementById('receipt-cost').innerText = `${cost} ₸`;
     document.getElementById('modal-receipt').classList.remove('hide');
     
@@ -371,7 +343,6 @@ function renderHistory() {
     });
 }
 
-// --- УТИЛИТЫ ---
 function phoneMask(e) {
     let x = e.target.value.replace(/\D/g, '').match(/(\d{0,1})(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
     if (!x[1]) x[1] = '7'; 
