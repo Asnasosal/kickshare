@@ -3,24 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ScootRent - Оператор</title>
+    <title>ScootRent</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        blue: {
-                            50: '#f0f9fd',  
-                            100: '#e0f2fa',
-                            200: '#bae0f5', 
-                            500: '#4f9fce', 
-                            600: '#4f9fce', 
-                            700: '#3a8ebd', 
-                        }
-                    }
-                }
-            }
+            theme: { extend: { colors: { blue: { 50: '#f0f9fd', 100: '#e0f2fa', 200: '#bae0f5', 500: '#4f9fce', 600: '#4f9fce', 700: '#3a8ebd' } } } }
         }
     </script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -31,25 +18,32 @@
 <div class="app-container flex flex-col">
 
     <!-- VIEW 0: AUTH -->
-    <div id="view-auth" class="flex-grow flex flex-col justify-center p-8 bg-white z-50">
+    <div id="view-auth" class="flex-grow flex flex-col justify-center p-8 bg-white z-50 relative">
+        <!-- Язык -->
+        <div class="absolute top-6 right-6 flex space-x-2 text-sm font-bold">
+            <button onclick="setLang('ru')" class="lang-btn text-blue-600">RU</button>
+            <span class="text-gray-300">|</span>
+            <button onclick="setLang('kk')" class="lang-btn text-gray-400">KK</button>
+        </div>
+
         <div class="mb-8 text-center">
-            <div class="w-16 h-16 bg-blue-600 rounded-2xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-200">
-                <i class="fas fa-bolt text-3xl text-white"></i>
+            <div class="w-20 h-20 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-lg shadow-blue-200">
+                <i class="fas fa-bolt text-4xl text-white"></i>
             </div>
-            <h1 class="text-2xl font-bold text-gray-800">ScootRent</h1>
-            <p class="text-gray-500 text-sm mt-2">Приложение для операторов</p>
+            <h1 class="text-3xl font-bold text-gray-800">ScootRent</h1>
+            <p class="text-gray-500 mt-2" data-lang="app_desc">Аренда электросамокатов</p>
         </div>
 
         <form id="auth-form" class="space-y-4">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Ваше Имя</label>
-                <input type="text" id="auth-name" required placeholder="Введите имя" class="input-field">
+                <label class="block text-sm font-medium text-gray-700 mb-1" data-lang="label_name">Ваше Имя</label>
+                <input type="text" id="auth-name" required class="input-field">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Телефон</label>
+                <label class="block text-sm font-medium text-gray-700 mb-1" data-lang="label_phone">Телефон</label>
                 <input type="tel" id="auth-phone" required placeholder="+7 777 000 00 00" class="input-field">
             </div>
-            <button type="submit" class="btn-primary mt-4">Войти в систему</button>
+            <button type="submit" class="btn-primary mt-6 text-lg shadow-lg shadow-blue-200" data-lang="btn_login">Войти в систему</button>
         </form>
     </div>
 
@@ -57,98 +51,97 @@
     <header id="app-header" class="p-4 flex justify-between items-center bg-white sticky top-0 z-10 border-b border-gray-100 hide">
         <h1 class="text-xl font-bold text-gray-800">ScootRent</h1>
         <div class="flex space-x-1 p-1 bg-gray-100 rounded-xl">
-            <button id="nav-scooters" class="nav-btn active text-xs px-3 py-1.5">Самокаты</button>
-            <button id="nav-history" class="nav-btn text-xs px-3 py-1.5">История</button>
-            <button id="nav-profile" class="nav-btn text-xs px-3 py-1.5">Профиль</button>
+            <button id="nav-scooters" class="nav-btn active text-xs px-3 py-1.5" data-lang="nav_scooters">Самокаты</button>
+            <button id="nav-history" class="nav-btn text-xs px-3 py-1.5" data-lang="nav_history">История</button>
+            <button id="nav-profile" class="nav-btn text-xs px-3 py-1.5" data-lang="nav_profile">Профиль</button>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
     <main id="main-content" class="flex-grow p-4 bg-gray-50 relative overflow-hidden h-full hide">
         
-        <!-- VIEW 1: СПИСОК САМОКАТОВ + АКТИВНАЯ АРЕНДА -->
+        <!-- VIEW 1: SCOOTERS -->
         <div id="view-scooters" class="fade-in space-y-4">
-            
-            <!-- WIDGET: ACTIVE RENT -->
+            <!-- Widget -->
             <div id="active-rent-widget" class="hide bg-white p-5 rounded-2xl shadow-lg border-l-4 mb-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-2 opacity-10"><i class="fas fa-stopwatch text-4xl"></i></div>
+                <button onclick="openSupport()" class="absolute top-4 right-4 w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 shadow-sm hover:bg-blue-100 transition-colors z-20"><i class="fas fa-headset"></i></button>
                 <div class="relative z-10">
-                    <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2">Активная аренда</h3>
-                    
+                    <h3 class="text-gray-500 text-xs font-bold uppercase tracking-wider mb-2" data-lang="active_rent_title">Активная аренда</h3>
                     <div class="flex justify-between items-end mb-6">
-                        <!-- Таймер и Модель -->
                         <div>
-                            <div class="text-4xl font-bold text-gray-800 tabular-nums tracking-tight leading-none" id="timer">00:00</div>
+                            <div class="text-4xl font-bold text-gray-800 tabular-nums leading-none" id="timer">00:00</div>
                             <div class="text-sm text-gray-500 font-medium mt-2" id="widget-model">Model X1</div>
                         </div>
-                
-                        <!-- Деньги -->
-                        <div class="text-right">
-                            <div class="text-3xl font-bold text-blue-600 leading-none">
-                                <span id="widget-total">0</span> <span class="text-xl">₸</span>
-                            </div>
-                            <div class="text-xs text-gray-400 font-medium mt-1">
-                                Тариф: <span id="widget-rate">50</span> ₸/мин
-                            </div>
+                        <div class="text-right pr-12">
+                            <div class="text-3xl font-bold text-blue-600 leading-none"><span id="widget-total">0</span> <span class="text-xl">₸</span></div>
+                            <div class="text-xs text-gray-400 font-medium mt-1"><span data-lang="rate">Тариф</span>: <span id="widget-rate">50</span> ₸/<span data-lang="min_short">мин</span></div>
                         </div>
                     </div>
-                    
-                    <button onclick="finishRent()" class="btn-danger py-3 text-sm shadow-md">Завершить аренду</button>
+                    <button onclick="finishRent()" class="btn-danger py-3 text-sm shadow-md" data-lang="btn_finish">Завершить аренду</button>
                 </div>
             </div>
 
-            <!-- Search -->
             <div class="relative">
-                <input type="text" id="search-input" placeholder="Поиск по ID или модели..." class="w-full pl-10 pr-4 py-3 rounded-xl border-none shadow-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                <input type="text" id="search-input" class="w-full pl-10 pr-4 py-3 rounded-xl border-none shadow-sm bg-white focus:ring-2 focus:ring-blue-500 outline-none transition-all">
                 <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
             </div>
-
-            <!-- List -->
-            <div id="scooter-list" class="space-y-3 pb-20">
-            </div>
+            <div id="scooter-list" class="space-y-3 pb-20"></div>
         </div>
 
-        <!-- VIEW 2: ОФОРМЛЕНИЕ АРЕНДЫ -->
+        <!-- VIEW 2: CONFIRM -->
         <div id="view-rent-confirm" class="hide fade-in h-full bg-white absolute top-0 left-0 w-full z-20 p-6 flex flex-col justify-center">
-            <div class="text-center mb-8">
-                <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-scooter text-4xl text-blue-600"></i>
+            <div class="text-center mb-8 flex flex-col items-center">
+                <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6"><i class="fas fa-scooter text-5xl text-blue-600"></i></div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-1" data-lang="confirm_title">Начать аренду?</h2>
+                <p class="text-lg font-medium text-gray-600 mb-1" id="confirm-model">Model X1</p>
+                <div class="inline-block bg-gray-100 px-3 py-1 rounded text-xs text-gray-500 font-bold mb-6">ID: <span id="confirm-id">--</span></div>
+                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 w-full mb-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-500 text-sm" data-lang="rate">Тариф</span>
+                        <span class="font-bold text-gray-800"><span id="confirm-price">50</span> ₸/<span data-lang="min_short">мин</span></span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-200 pt-2">
+                        <span class="text-blue-600 font-bold text-sm" data-lang="prepayment">Предоплата</span>
+                        <span class="font-bold text-blue-600">500 ₸</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2" data-lang="prepayment_desc">Сумма будет заморожена перед началом</p>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-800 mb-2">Начать аренду?</h2>
-                <p class="text-gray-500" id="confirm-model">Model X1</p>
-                <div class="mt-2 inline-block bg-gray-100 px-3 py-1 rounded text-sm text-gray-600">ID: <span id="confirm-id">--</span></div>
-                <div class="mt-4 text-xl font-bold text-blue-600" id="confirm-price">50 ₸/мин</div>
             </div>
-
-            <div class="space-y-3">
-                <button onclick="startRent()" class="btn-primary py-4 text-lg shadow-lg shadow-blue-200">Подтвердить</button>
-                <button onclick="cancelRent()" class="w-full py-4 text-gray-500 font-medium hover:bg-gray-50 rounded-xl transition-colors">Отмена</button>
+            <div class="space-y-3 mt-auto mb-10">
+                <button onclick="startRent()" class="btn-primary py-4 text-lg shadow-lg shadow-blue-200" data-lang="btn_confirm">Подтвердить</button>
+                <button onclick="cancelRent()" class="w-full py-4 text-gray-500 font-medium hover:bg-gray-50 rounded-xl transition-colors" data-lang="btn_cancel">Отмена</button>
             </div>
         </div>
 
-        <!-- VIEW 3: ИСТОРИЯ -->
+        <!-- VIEW 3: HISTORY -->
         <div id="view-history" class="hide fade-in space-y-4">
-            <h3 class="text-lg font-bold mb-4 px-1">История поездок</h3>
-            <div id="history-list" class="space-y-3 pb-10">
-                <div class="text-center text-gray-400 mt-10 text-sm" id="empty-history-msg">История пока пуста</div>
+            <h3 class="text-lg font-bold mb-4 px-1" data-lang="history_title">История поездок</h3>
+            <div id="history-list" class="space-y-3 pb-20">
+                <div class="text-center text-gray-400 mt-10 text-sm" id="empty-history-msg" data-lang="history_empty">История пока пуста</div>
             </div>
         </div>
 
-        <!-- View 4 Профиль -->
-        <div id="view-profile" class="hide fade-in flex flex-col items-center pt-10">
-            <div class="w-24 h-24 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 shadow-lg shadow-blue-200" id="profile-avatar">
+        <!-- VIEW 4: PROFILE -->
+        <div id="view-profile" class="hide fade-in flex flex-col items-center pt-6 pb-20 relative">
+            
+            <!-- Переключатель языка внутри профиля -->
+            <div class="absolute top-0 right-0 flex space-x-2 text-sm font-bold bg-white px-2 py-1 rounded-lg border border-gray-100">
+                <button onclick="setLang('ru')" class="lang-btn text-blue-600">RU</button>
+                <span class="text-gray-300">|</span>
+                <button onclick="setLang('kk')" class="lang-btn text-gray-400">KK</button>
             </div>
+
+            <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-2xl font-bold mb-3 shadow-lg shadow-blue-200" id="profile-avatar">--</div>
             <h2 class="text-xl font-bold text-gray-800 mb-1" id="profile-name">Имя</h2>
-            <p class="text-gray-500 mb-8" id="profile-phone">+7 ...</p>
+            <p class="text-gray-500 mb-6" id="profile-phone">+7 ...</p>
 
             <!-- Карточка Баланса -->
             <div class="w-full bg-blue-600 text-white p-6 rounded-2xl shadow-lg shadow-blue-200 mb-6 relative overflow-hidden">
                 <div class="absolute -right-6 -top-6 w-32 h-32 bg-white opacity-10 rounded-full"></div>
                 <div class="absolute -left-6 -bottom-6 w-20 h-20 bg-white opacity-10 rounded-full"></div>
-                
                 <div class="relative z-10">
                     <p class="text-blue-100 text-sm font-medium mb-1 flex items-center">
-                        <i class="fas fa-wallet mr-2"></i> Счёт к оплате
+                        <i class="fas fa-wallet mr-2"></i> <span data-lang="spent_total">Потрачено всего</span>
                     </p>
                     <h3 class="text-4xl font-bold tracking-tight">
                         <span id="profile-balance">0</span> <span class="text-2xl">₸</span>
@@ -156,54 +149,89 @@
                 </div>
             </div>
 
-            <div class="w-full space-y-3">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
-                    <span class="text-gray-600">Статус</span>
-                    <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-bold">Активен</span>
+            <!-- Блок карты -->
+            <div class="w-full mb-4">
+                <div id="card-placeholder" class="bg-gray-100 rounded-xl p-6 text-center border-2 border-dashed border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors" onclick="linkCard()">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-2 text-gray-400"><i class="fas fa-plus text-xl"></i></div>
+                    <p class="text-gray-500 font-bold text-sm" data-lang="link_card">Привязать карту</p>
                 </div>
-                <button onclick="logout()" class="btn-danger mt-8">Выйти из профиля</button>
+
+                <div id="card-linked" class="hide bg-gradient-to-r from-gray-800 to-gray-900 rounded-xl p-5 text-white shadow-lg relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-20"><i class="fab fa-cc-visa text-5xl"></i></div>
+                    <div class="text-xs text-gray-400 mb-6 uppercase tracking-widest">Linked Card</div>
+                    <div class="text-xl font-mono tracking-widest mb-4">•••• •••• •••• 4242</div>
+                    <div class="flex justify-between items-end">
+                        <div class="text-xs text-gray-400">Card Holder<br><span class="text-white font-bold text-sm" id="card-holder-name">NAME</span></div>
+                        <button onclick="unlinkCard()" class="text-xs bg-white/20 hover:bg-white/30 px-3 py-1 rounded text-white backdrop-blur-sm transition-colors" data-lang="unlink">Отвязать</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="w-full space-y-3">
+                <button onclick="openSupport()" class="w-full bg-white text-gray-700 font-bold py-3 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-comment-dots mr-2 text-blue-600"></i> <span data-lang="btn_support">Поддержка</span>
+                </button>
+                <button onclick="logout()" class="btn-danger mt-4" data-lang="btn_logout">Выйти из профиля</button>
             </div>
         </div>
-
     </main>
 </div>
 
-<!-- модальное окно -->
+<!-- MODALS -->
 <div id="modal-finish" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hide fade-in">
-    <div class="bg-white rounded-2xl p-6 w-11/12 max-w-sm shadow-2xl transform transition-all scale-100">
-        <div class="text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
-                <i class="fas fa-exclamation-triangle text-red-600"></i>
-            </div>
-            <h3 class="text-lg leading-6 font-bold text-gray-900">Завершить аренду?</h3>
-            <div class="mt-2">
-                <p class="text-sm text-gray-500">Поездка будет остановлена, и будет сформирован итоговый чек.</p>
-            </div>
-        </div>
+    <div class="bg-white rounded-2xl p-6 w-11/12 max-w-sm shadow-2xl transform transition-all scale-100 text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4"><i class="fas fa-stop text-red-600"></i></div>
+        <h3 class="text-lg leading-6 font-bold text-gray-900" data-lang="finish_title">Завершить аренду?</h3>
+        <p class="text-sm text-gray-500 mt-2" data-lang="finish_desc">Поездка будет остановлена, и сформируется чек.</p>
         <div class="mt-6 flex space-x-3">
-            <button onclick="confirmFinishRent()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl shadow hover:bg-red-700 transition-colors">Да, завершить</button>
-            <button onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">Отмена</button>
+            <button onclick="confirmFinishRent()" class="flex-1 bg-red-600 text-white font-bold py-3 rounded-xl shadow hover:bg-red-700 transition-colors" data-lang="btn_yes_finish">Да, завершить</button>
+            <button onclick="closeModal()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors" data-lang="btn_cancel">Отмена</button>
         </div>
     </div>
 </div>
 
-<!-- View: ЧЕК (Receipt) -->
 <div id="modal-receipt" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hide fade-in">
     <div class="bg-white rounded-2xl p-6 w-11/12 max-w-sm shadow-2xl transform transition-all scale-100 text-center">
-        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4">
-            <i class="fas fa-check text-2xl text-green-600"></i>
+        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-4"><i class="fas fa-check text-2xl text-green-600"></i></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-1" data-lang="receipt_title">Поездка завершена</h3>
+        <p class="text-sm text-gray-500 mb-6" data-lang="receipt_desc">Спасибо, что выбрали нас!</p>
+        <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100 space-y-2 text-left">
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500" data-lang="receipt_time_cost">Стоимость времени:</span>
+                <span class="font-bold text-gray-800" id="receipt-total-time">0 ₸</span>
+            </div>
+            <div class="flex justify-between text-sm">
+                <span class="text-green-600" data-lang="prepayment">Предоплата:</span>
+                <span class="font-bold text-green-600">-500 ₸</span>
+            </div>
+            <div class="border-t border-gray-200 my-2 pt-2 flex justify-between items-center">
+                <span class="text-xs text-gray-400 uppercase font-bold tracking-wider" data-lang="to_pay">К доплате</span>
+                <div class="text-3xl font-bold text-blue-600" id="receipt-final">0 ₸</div>
+            </div>
+            <p class="text-[10px] text-gray-400 text-center mt-1" id="receipt-refund-msg"></p>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-1">Поездка завершена!</h3>
-        <p class="text-sm text-gray-500 mb-6">Вы успешно сдали самокат</p>
-        
-        <div class="bg-gray-50 rounded-xl p-4 mb-6 border border-gray-100">
-            <p class="text-xs text-gray-400 uppercase font-bold tracking-wider mb-1">Итого к оплате</p>
-            <div class="text-4xl font-bold text-gray-800" id="receipt-cost">0 ₸</div>
-        </div>
+        <button onclick="closeReceipt()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors" data-lang="btn_great">Отлично</button>
+    </div>
+</div>
 
-        <button onclick="closeReceipt()" class="w-full bg-blue-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-colors">
-            Отлично
-        </button>
+<div id="modal-support" class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm hide fade-in">
+    <div class="bg-white rounded-t-2xl sm:rounded-2xl p-6 w-full max-w-sm shadow-2xl transform transition-all">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-gray-900" data-lang="support_title">Служба поддержки</h3>
+            <button onclick="closeSupport()" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+        </div>
+        <div class="space-y-3">
+            <a href="https://wa.me/77770000000" target="_blank" class="flex items-center p-4 bg-green-50 rounded-xl border border-green-100 hover:bg-green-100 transition-colors">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white mr-4"><i class="fab fa-whatsapp text-xl"></i></div>
+                <div><div class="font-bold text-gray-800">WhatsApp</div><div class="text-xs text-gray-500" data-lang="support_wa_time">Среднее время ответа: 2 мин</div></div>
+            </a>
+            <a href="tel:+77770000000" class="flex items-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors">
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white mr-4"><i class="fas fa-phone-alt"></i></div>
+                <div><div class="font-bold text-gray-800" data-lang="support_call">Позвонить оператору</div><div class="text-xs text-gray-500">+7 (777) 000-00-00</div></div>
+            </a>
+        </div>
+        <button onclick="closeSupport()" class="w-full mt-6 bg-gray-100 text-gray-600 font-bold py-3 rounded-xl" data-lang="btn_close">Закрыть</button>
     </div>
 </div>
 
